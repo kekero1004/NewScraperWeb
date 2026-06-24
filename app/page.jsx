@@ -6,6 +6,8 @@ import {
   ExternalLink, Loader2, X, Newspaper, FileText, Mail, Plus,
   RefreshCw, Database, Flame, Send, Hash, ChevronRight, Layers,
 } from "lucide-react";
+import ModeTabs from "./ModeTabs";
+import PapersView from "./PapersView";
 
 const DEFAULT_KEYWORDS = "BIM, 스마트건설, 디지털트윈, 드론, 수자원, AI 건설";
 const SUGGESTED = ["공간정보", "GIS", "측량", "하천", "방재", "로봇", "양자컴퓨터", "자율주행", "스마트안전", "도로", "철도", "상하수도"];
@@ -44,6 +46,7 @@ function download(name, content, mime) {
 }
 
 export default function Home() {
+  const [mode, setMode] = useState("news");
   const [input, setInput] = useState(DEFAULT_KEYWORDS);
   const [sources, setSources] = useState({ naver: true, google: true, daum: false });
   const [articles, setArticles] = useState([]);
@@ -175,17 +178,19 @@ export default function Home() {
     }
   };
 
+  if (mode === "papers") {
+    return (
+      <div className="min-h-screen flex bg-slate-50 text-slate-800">
+        <PapersView mode={mode} setMode={setMode} />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex bg-slate-50 text-slate-800">
       {/* 좌측 깃북 스타일 사이드바 */}
       <aside className="w-64 shrink-0 bg-white border-r border-slate-200 flex flex-col h-screen sticky top-0">
-        <div className="flex items-center gap-2.5 px-4 py-4 border-b border-slate-100">
-          <div className="bg-blue-600 text-white p-2 rounded-xl"><Newspaper size={20} /></div>
-          <div className="min-w-0">
-            <h1 className="text-base font-bold text-slate-900 leading-tight">뉴스 모음</h1>
-            <p className="text-xs text-slate-500 truncate">키워드별 최신 뉴스</p>
-          </div>
-        </div>
+        <ModeTabs mode={mode} setMode={setMode} />
 
         <div className="px-4 pt-4 pb-2 text-xs font-semibold text-slate-400 uppercase tracking-wide flex items-center gap-1.5">
           <Layers size={13} /> 키워드
